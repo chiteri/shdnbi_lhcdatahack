@@ -20,6 +20,7 @@ nimages = 50 # This is the number of images (frames) per each
 
 # Open the first file and read its content
 nframes_generated = 0
+#with open('one_event_muon_sample.dat', 'r' ) as file:
 with open('small_muon_sample.dat', 'r' ) as file:
 
     particle_details = []
@@ -47,16 +48,20 @@ with open('small_muon_sample.dat', 'r' ) as file:
                     # because we know we are working with events with only two muons.
                     charge = [0.0, 0.0] # charge of the muons.
                     px = [0.0,0.0] # x-component of two muons.
+                    py = [0.0,0.0] # y-component of two muons.
                     pz = [0.0,0.0] # z-component of two muons.
+                    E = [0.0,0.0] # z-component of two muons.
 
                     # Loop through the number of particles detected in the decay
                     for n in range(0, no_of_particles): 
                          # Convert the next set of inputs into a list 
                          energy, x, y, z, q = particle_details[n] # Unpack the list 
                          px[n] = float(x)
+                         py[n] = float(y)
                          pz[n] = float(z)
                          charge[n] = int(q)
-                         print energy, x, y, z, q
+                         E[n] = float(energy)
+                         #print energy, x, y, z, q
                          
                     #exit()
 
@@ -111,23 +116,41 @@ with open('small_muon_sample.dat', 'r' ) as file:
                         ############################################################################
 
                        # print data_list
-                        for x,y,q in zip(px,pz,charge):
+                        for x,z,q,energy in zip(px,pz,charge,E):
 
-                            velocity_scaling = 20000.0
-                            lat = np.linspace(xcms,xcms+i*x*velocity_scaling,i+1)
-                            lon = np.linspace(ycms,ycms+i*y*velocity_scaling,i+1)
+                            velocity_scaling = 200000.0
+
+                            # To make them move at the same velocity, we only worry about the direction,
+                            # and not the scale.
+                            angle = np.arctan2(z,x) # use this to get the proper angle.
+                            distance_moved = i*velocity_scaling
+
+                            # Calculate a new x and y, just to move the muons in the image frame.
+                            x = distance_moved*np.cos(angle)
+                            z = distance_moved*np.sin(angle)
+
+                            lat = np.linspace(xcms,xcms+x,i+1)
+                            lon = np.linspace(ycms,ycms+z,i+1)
 
                             #print lon
                             #print lat
 
-                            #xpt,ypt = m(lon,lat)
-                            m.plot(lat,lon,'-',color='r',linewidth=2)
+                            # Color the line according to the energy.
+                            # Change the width accordingly as well.
+                            linewidth = energy/5.0
+                            color = 'r' # HOW DO WE TURN A NUMBER INTO A COLOR?
+                                        # THE ENERGIES
+                                        # MANY MUONS WILL HAVE ENERGY BETWEEN 2-40 GeV.
+                                        # BUT SOME WILL BE OVER 200!
+                            m.plot(lat,lon,'-',color='r',linewidth=linewidth)
 
                             # Color the dot, according to the charge of the muon.
                             muon_color='orange'
                             if q<0:
                                 muon_color='blue'
-                            m.plot(lat[-1],lon[-1],'o',markersize=5,color=muon_color)
+
+                            markersize = energy*2.0
+                            m.plot(lat[-1],lon[-1],'o',markersize=markersize,color=muon_color)
 
 
                        # plt.title("Muon flight paths")
