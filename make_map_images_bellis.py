@@ -9,13 +9,13 @@ import math
 # lat_ts is the latitude of true scale.
 # resolution = 'c' means use crude resolution coastlines.
 
-'''
+#'''
 m = Basemap(projection='merc',llcrnrlat=-80,urcrnrlat=80,\
                     llcrnrlon=-180,urcrnrlon=180,lat_ts=20,resolution='c')
-'''
-m = Basemap(projection='mbtfpq',lon_0=0,resolution='c')
+#'''
+#m = Basemap(projection='mbtfpq',lon_0=0,resolution='c')
 
-nimages = 2
+nimages = 50
 for i in range(0,nimages):
 
     #m.shadedrelief()
@@ -37,19 +37,18 @@ for i in range(0,nimages):
     # Coordinates for CERN.
     ############################################################################
     lon, lat = 6.1, 46.30
-    xpt,ypt = m(lon,lat)
-    cern = m.plot(xpt,ypt,'o',color='red',markersize=10)
+    xcms,ycms = m(lon,lat)
+    cms_detector = m.plot(xcms,ycms,'o',color='red',markersize=10)
 
     # Direction of the beam, along the z axis
     z_direction = 280.2 # degrees as measured from north. So this
                         # is almost due west.
-    xpt1 = xpt + 3000000*math.cos(np.deg2rad(z_direction-90))
-    ypt1 = ypt + 3000000*math.sin(np.deg2rad(z_direction-90))
+    xpt1 = xcms + 3000000*math.cos(np.deg2rad(z_direction-90))
+    ypt1 = ycms + 3000000*math.sin(np.deg2rad(z_direction-90))
 
-    cernz = m.plot([xpt,xpt1],[ypt,ypt1],'-',color='pink',linewidth=4)
-
-    print xpt
-    print ypt
+    cms_detector_z = m.plot([xcms,xpt1],[ycms,ypt1],'-',color='pink',linewidth=2)
+    #print xpt
+    #print ypt
 
     ############################################################################
     # Coordinates for Nairobi.
@@ -58,18 +57,25 @@ for i in range(0,nimages):
     xpt,ypt = m(lon,lat)
     nairobi = m.plot(xpt,ypt,'o',color='yellow',markersize=10)
 
+    ############################################################################
+    # Let's just make some random moving particles.
+    ############################################################################
 
-    #lon = np.linspace(-180,180,10) + i*1
-    #lat = np.linspace(-80,80,10) + i*1
-    lon = np.linspace(-180,-180+i*2,i+1)
-    lat = np.linspace(-80,-80+i*2,i+1)
+    px = [2.0,10.0] # x-component of two muons.
+    py = [3.0,-8.0] # x-component of two muons.
 
-    print lon
-    print lat
+    for x,y in zip(px,py):
 
-    xpt,ypt = m(lon,lat)
-    #p = m.plot(xpt,ypt,'o',color='r',markersize=5)
-    p = m.plot(xpt,ypt,'-',color='r',linewidth=5)
+        velocity_scaling = 20000.0
+        lat = np.linspace(xcms,xcms+i*x*velocity_scaling,i+1)
+        lon = np.linspace(ycms,ycms+i*y*velocity_scaling,i+1)
+
+        print lon
+        print lat
+
+        #xpt,ypt = m(lon,lat)
+        m.plot(lat,lon,'-',color='r',linewidth=2)
+        m.plot(lat[-1],lon[-1],'o',markersize=5,color='cyan')
 
     plt.title("Muon flight paths")
     name = "frames/movie_frames_%04d.png" % (i)
