@@ -1,0 +1,19 @@
+Science Hack day, Nairobi 2012 - Large Hadron collider data hack. Visualizations with matplotlib and Basemap.  
+
+################################################################################
+# For Matt's code
+################################################################################
+
+Make sure you have 
+python, numpy, matplotlib, and basemap installed.
+
+Create a directory here called 'frames'. Then run
+
+  python make_map_images_bellis.py
+
+This will create a bunch of single frames that can be joined together to make
+a movie. The file cmds.sh has some commands to convert these. For instance,
+
+  ffmpeg -r 25 -qscale 2 -i frames/movie_frames_%04d.png two_muons.mp4
+
+
