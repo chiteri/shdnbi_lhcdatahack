@@ -1,19 +1,90 @@
-Science Hack day, Nairobi 2012 - Large Hadron collider data hack. Visualizations with matplotlib and Basemap.  
-
 ################################################################################
-# For Matt's code
+# Explanation.
 ################################################################################
 
-Make sure you have 
-python, numpy, matplotlib, and basemap installed.
+################################################################################
+# The physics
+################################################################################
 
-Create a directory here called 'frames'. Then run
+This animation is a representation of the flight path of muons, created
+in the CMS detector by collisions of protons accelerated in the 
+LHC (Large Hadron Collider).
 
-  python make_map_images_bellis.py
+The LHC accelerates protons to 4 TeV (tera-electron volts). This is the 
+same as converting 4000 protons into pure energy, and pouring all that
+energy into speeding up a proton!
 
-This will create a bunch of single frames that can be joined together to make
-a movie. The file cmds.sh has some commands to convert these. For instance,
+When 2 protons collide (p-p collision), there is a tremendous amount energy focused in a
+very small volume. This energy is released as new particles are created.
+Some of these particles live for such a short period of time, that they
+(the parent particle) decay almost instantaneously to other particles
+(the daughter particles). You can see an example of these particles moving
+through the CMS detector in the .png image, Resources/cms_2_muons.png.
 
-  ffmpeg -r 25 -qscale 2 -i frames/movie_frames_%04d.png two_muons.mp4
+Some of these daughter particles are called muons. These are the red lines
+in the image. Some particles, like the Higgs, might decay to two muons;
+specifically a muon with +1 electrical charge and a muon with -1 electrical 
+charge. 
+
+Sometimes, different parent particles will create two muons in the same
+p-p collision, but we do not know who decayed into whom. So when physicists 
+analyze the data, we assume that the muons came from the same parent particle
+and we calculate the mass of that parent particle. We do this calculation
+using the formulas of Special Relativity, taught to us by Albert
+Einstein.
 
 
+
+################################################################################
+# The animation.
+################################################################################
+
+A small red dot represents the coordinates of CERN, which straddles the borders of
+France and Switzerland. 
+
+A pulsating square of green, red, and black is located at the coordinates
+of Nairobi, Kenya, the location for this Science Hack Day. 
+
+A pink line, pointing from CERN to the west, is the definition of the z-axis, 
+along which LHC is colliding the proton beams inside of the CMS detector.
+
+We read in events, provided for us by the CMS experiment, that have two muons 
+in them. We are given the energy, 3-momentum (px,py,pz), and the charge of each
+muon.
+
+We animate the muons, moving in the x-z plane. Since the y-direction is sticking
+up and out of the Earth (or into it) we do not show that in this animation.
+Muons with +1 charge are orange and muons with -1 charge are blue. 
+The size of the muon is proportional to its energy.
+
+We create a fading dot at CERN when the muons are created. This represents
+the theoretical parent particle. We say ``theoretical" because there is no 
+way to know, for any given pair of muons, whether or not they came from
+the same parent. If the two muons are opposite charges (+1 and -1) the parent
+particle is coloured gray. Otherwise, it is the same color as the daughter
+muons. The size is proportional to its mass/energy.
+
+
+################################################################################
+# Some key physics concepts to point out.
+################################################################################
+
+1) The muons are not actually shown at real speed in the animation. They travel
+close to the speed of light, which means that to travel from CERN to Nairobi (about
+6000 kilometers) would only take about 2/100's of a second!
+
+2) The muons are traveling at the same speed in the animation, even when they have
+very different energies. Why? The theory of special relativity tells us that nothing
+can go faster than the speed of light. Which means that as you put more and more energy
+into a particle like a muon, it gets closer and closer to the speed of light...but
+it never quite gets there. The muons produced at CERN are all at high enough energies
+that they are effectively moving at the same speed. Some are 99% the speed of light.
+Some are 99.99%. Some are 99.9999823% the speed of light! Those are all close
+enough to the same speed, that we cannot even measure the difference in those
+speeds in the physics instrumentation!
+
+3) The mass/energy of the parent particle sometimes appears to be smaller 
+than the energy of the largest muon (by comparing the size). That is because
+sometimes the parent particle is moving itself and that energy is transferred
+to the muons. We did not represent the movement of the parent particle in this
+animation.
