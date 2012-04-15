@@ -35,7 +35,7 @@ nimages = 50 # This is the number of images (frames) per each
              # proton collision (dimuon event).
 
 # Set this, in case we don't want to read in all 100k events.
-max_nevents = 20
+max_nevents = 50 # number of p-p collisions.
 nevents = 0
 
 nframes_generated = 0
@@ -191,7 +191,7 @@ with open('Resources/data_2_muons.dat','r') as file: # This is the big file
                         #print mass_of_parent_particle
 
                         # Have the transparency fade out over the time of the particles flight.
-                        alpha = (nimages-i)/float(nimages/2.0)
+                        alpha = (nimages-(i/2.0))/float(nimages)
                         color = 'gray'
                         if charge[0]>0 and charge[1]>0:
                             color='orange'
