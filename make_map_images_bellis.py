@@ -9,11 +9,11 @@ import math
 # lat_ts is the latitude of true scale.
 # resolution = 'c' means use crude resolution coastlines.
 
-#'''
+'''
 m = Basemap(projection='merc',llcrnrlat=-80,urcrnrlat=80,\
                     llcrnrlon=-180,urcrnrlon=180,lat_ts=20,resolution='c')
-#'''
-#m = Basemap(projection='mbtfpq',lon_0=0,resolution='c')
+'''
+m = Basemap(projection='mbtfpq',lon_0=0,resolution='c')
 
 nimages = 50
 for i in range(0,nimages):
