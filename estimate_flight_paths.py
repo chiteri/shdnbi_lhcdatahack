@@ -2,6 +2,7 @@ from mpl_toolkits.basemap import Basemap
 import numpy as np
 import matplotlib.pyplot as plt
 import math
+import pylab
 
 ################################################################################
 # Calculate the invariant mass according to the theory of special relativity
@@ -43,7 +44,7 @@ nframes_generated = 0
 # Open the first file and read its content
 #with open('one_event_muon_sample.dat', 'r' ) as file:
 #with open('small_muon_sample.dat', 'r' ) as file:
-with open('Resources/data_2_muons.dat','r') as file: # This is the big file
+with open('resources/data_2_muons.dat','r') as file: # This is the big file
 
     particle_details = []
 
@@ -207,6 +208,7 @@ with open('Resources/data_2_muons.dat','r') as file: # This is the big file
                         plt.title(title)
                         name = "frames/movie_frames_%04d.png" % (nframes_generated)
                         plt.savefig(name)
+			pylab.close(name)
 
                         #plt.show()
                         plt.clf()
