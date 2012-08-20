@@ -10,7 +10,7 @@ LATITUDE = {'CERN':46.3, 'Nairobi': 1.28}
 # Direction of the beam, along the z axis 
 Z_DIRECTION = 280.2 # degrees as measured from north. So this is almost due West 
 
-def make_map():
+def make_map(frame_no):
     m = Basemap(projection='merc',llcrnrlat=-80,urcrnrlat=80, llcrnrlon=-180,urcrnrlon=180,lat_ts=20,resolution='c')
 
     # Fill in the map. 
@@ -41,7 +41,7 @@ def make_map():
     xpt,ypt = m(LONGITUDE['Nairobi'],LATITUDE['Nairobi'])
 
     # Have the markersize change with each frame.
-    markersize=4*(np.sin(10*0.1)+1.0)
+    markersize=4*(np.sin(frame_no*0.1)+1.0)
 
     # Draw three different markers, to represent the Kenyan flag.
     nairobi = m.plot(xpt,ypt,'o',color='green',markersize=3.0*markersize,marker='s')
